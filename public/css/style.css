@@ -46,6 +46,7 @@
     --ac-img-legal: url('/images/heroes/legal.jpg');
     --ac-img-auth: url('/images/heroes/auth.jpg');
     --ac-img-benefits: url('/images/heroes/benefits.jpg');
+    --ac-surface-inverse: #1a222d;
     --ac-text-on-dark: #ffffff;
     --ac-text-on-dark-muted: rgba(255, 255, 255, 0.88);
     --ac-text-body: #3a3a4a;
@@ -233,6 +234,37 @@ body.ac-body {
 .ac-dock__bottom {
     padding: 0 0.65rem;
     width: 100%;
+}
+
+.ac-theme-toggle {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+    width: 100%;
+}
+
+.ac-theme-toggle--topbar {
+    width: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 0.55rem;
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 1.05rem;
+    transition: background var(--transition), color var(--transition);
+}
+
+.ac-theme-toggle--topbar:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--ac-lime);
+}
+
+.ac-topbar__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
 }
 
 .btn-outline-ac {
@@ -642,7 +674,37 @@ body.ac-body {
     background-position: center;
 }
 
-/* ——— Category scroll ——— */
+/* ——— Category grid (one row on desktop) ——— */
+.ac-cat-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 1.25rem;
+    padding: 0.75rem 0.25rem 0.25rem;
+}
+
+@media (max-width: 1200px) {
+    .ac-cat-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .ac-cat-grid {
+        display: flex;
+        gap: 1rem;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-bottom: 1rem;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .ac-cat-grid .category-card {
+        flex: 0 0 min(280px, 85vw);
+        scroll-snap-align: start;
+    }
+}
+
 .ac-cat-scroll-wrap {
     padding: 0.5rem 0 0.25rem;
     overflow: hidden;
@@ -668,8 +730,7 @@ body.ac-body {
 }
 
 .category-card {
-    flex: 0 0 min(300px, 85vw);
-    scroll-snap-align: start;
+    min-width: 0;
     border: 1px solid var(--ac-border);
     border-radius: var(--ac-radius-lg);
     background-color: var(--ac-paper);
@@ -681,15 +742,27 @@ body.ac-body {
 }
 
 .category-card--letnie {
-    background-image: linear-gradient(180deg, rgba(255, 254, 249, 0.92) 0%, rgba(255, 254, 249, 0.98) 55%), url('/images/heroes/bento-drive.jpg');
+    background-image: linear-gradient(180deg, rgba(255, 254, 249, 0.78) 0%, rgba(255, 254, 249, 0.9) 55%), url('/images/heroes/bento-drive.jpg');
 }
 
 .category-card--zimnie {
-    background-image: linear-gradient(180deg, rgba(255, 254, 249, 0.92) 0%, rgba(255, 254, 249, 0.98) 55%), url('/images/heroes/bento-winter.jpg');
+    background-image: linear-gradient(180deg, rgba(255, 254, 249, 0.78) 0%, rgba(255, 254, 249, 0.9) 55%), url('/images/heroes/bento-winter.jpg');
 }
 
 .category-card--vsesezonnye {
-    background-image: linear-gradient(180deg, rgba(255, 254, 249, 0.92) 0%, rgba(255, 254, 249, 0.98) 55%), url('/images/heroes/bento-legal.jpg');
+    background-image: linear-gradient(180deg, rgba(255, 254, 249, 0.78) 0%, rgba(255, 254, 249, 0.9) 55%), url('/images/heroes/bento-legal.jpg');
+}
+
+.category-card--litye-diski {
+    background-image: linear-gradient(180deg, rgba(255, 254, 249, 0.78) 0%, rgba(255, 254, 249, 0.9) 55%), url('/images/heroes/bento-drive.jpg');
+}
+
+.category-card--stalnye-diski {
+    background-image: linear-gradient(180deg, rgba(255, 254, 249, 0.78) 0%, rgba(255, 254, 249, 0.9) 55%), url('/images/heroes/service.jpg');
+}
+
+.category-card--kovannye-diski {
+    background-image: linear-gradient(180deg, rgba(255, 254, 249, 0.78) 0%, rgba(255, 254, 249, 0.9) 55%), url('/images/heroes/catalog.jpg');
 }
 
 .category-card:hover {
@@ -1248,12 +1321,12 @@ body.ac-body {
 }
 
 .service-price-table thead tr {
-    background: var(--ac-ink);
+    background: var(--ac-surface-inverse);
 }
 
 .service-price-table thead th {
-    background: var(--ac-ink) !important;
-    color: #fff !important;
+    background: var(--ac-surface-inverse) !important;
+    color: var(--ac-text-on-dark) !important;
     font-weight: 600;
     border: none;
     padding: 0.75rem 1rem;
@@ -1315,12 +1388,12 @@ body.ac-body {
 
 .ac-card-header-dark,
 thead.ac-card-header-dark {
-    background: var(--ac-ink) !important;
-    color: #fff !important;
+    background: var(--ac-surface-inverse) !important;
+    color: var(--ac-text-on-dark) !important;
 }
 
 thead.ac-card-header-dark th {
-    color: #fff;
+    color: var(--ac-text-on-dark);
     border: none;
     font-weight: 600;
 }
@@ -1518,4 +1591,136 @@ main { flex: 1; }
 
 @media (max-width: 768px) {
     .product-photo-wrap--card { height: 160px; }
+}
+
+/* ——— Theme: dark palette (WCAG-friendly contrast on surfaces) ——— */
+html {
+    color-scheme: light;
+}
+
+html[data-theme="dark"] {
+    color-scheme: dark;
+}
+
+html[data-theme="dark"] {
+    --ac-ink: #eef1f5;
+    --ac-ink-soft: #b4becd;
+    --ac-surface-inverse: #232d3a;
+    --ac-cream: #0f141c;
+    --ac-cream-dark: #171e28;
+    --ac-paper: #1a222e;
+    --ac-lime: #d9bc72;
+    --ac-lime-dim: rgba(217, 188, 114, 0.16);
+    --ac-coral: #e07a62;
+    --ac-teal: #4db3c4;
+    --ac-teal-light: #6ec9d8;
+    --ac-muted: #8f9bb0;
+    --ac-border: rgba(255, 255, 255, 0.1);
+    --ac-dock: #0a0e14;
+    --ac-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    --primary-light: #b4becd;
+    --ac-text-body: #c8d0dc;
+    --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.25);
+    --ac-overlay-hero: linear-gradient(105deg, rgba(8, 10, 14, 0.94) 0%, rgba(12, 16, 22, 0.86) 42%, rgba(8, 10, 14, 0.78) 100%);
+    --ac-overlay-header: linear-gradient(135deg, rgba(8, 10, 14, 0.92) 0%, rgba(14, 18, 26, 0.84) 100%);
+    --ac-overlay-footer: linear-gradient(180deg, rgba(8, 10, 14, 0.96) 0%, rgba(8, 10, 14, 0.99) 100%);
+}
+
+html[data-theme="dark"] .text-muted {
+    color: #9aa5b8 !important;
+}
+
+html[data-theme="dark"] .text-dark {
+    color: var(--ac-ink) !important;
+}
+
+html[data-theme="dark"] .card {
+    background: var(--ac-paper);
+    border-color: var(--ac-border);
+    color: var(--ac-text-body);
+}
+
+html[data-theme="dark"] .table {
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--ac-text-body);
+    --bs-table-border-color: var(--ac-border);
+    --bs-table-striped-bg: rgba(255, 255, 255, 0.03);
+    --bs-table-hover-bg: var(--ac-lime-dim);
+    --bs-table-hover-color: var(--ac-ink);
+}
+
+html[data-theme="dark"] .ac-section--benefits {
+    background-image: linear-gradient(180deg, rgba(15, 20, 28, 0.96) 0%, rgba(15, 20, 28, 0.9) 100%), var(--ac-img-benefits);
+}
+
+html[data-theme="dark"] .category-card {
+    background-image: linear-gradient(180deg, rgba(22, 28, 38, 0.93) 0%, rgba(18, 24, 32, 0.98) 55%), var(--ac-img-catalog);
+}
+
+html[data-theme="dark"] .category-card--letnie {
+    background-image: linear-gradient(180deg, rgba(22, 28, 38, 0.72) 0%, rgba(18, 24, 32, 0.85) 55%), url('/images/heroes/bento-drive.jpg');
+}
+
+html[data-theme="dark"] .category-card--zimnie {
+    background-image: linear-gradient(180deg, rgba(22, 28, 38, 0.72) 0%, rgba(18, 24, 32, 0.85) 55%), url('/images/heroes/bento-winter.jpg');
+}
+
+html[data-theme="dark"] .category-card--vsesezonnye {
+    background-image: linear-gradient(180deg, rgba(22, 28, 38, 0.72) 0%, rgba(18, 24, 32, 0.85) 55%), url('/images/heroes/bento-legal.jpg');
+}
+
+html[data-theme="dark"] .category-card--litye-diski {
+    background-image: linear-gradient(180deg, rgba(22, 28, 38, 0.72) 0%, rgba(18, 24, 32, 0.85) 55%), url('/images/heroes/bento-drive.jpg');
+}
+
+html[data-theme="dark"] .category-card--stalnye-diski {
+    background-image: linear-gradient(180deg, rgba(22, 28, 38, 0.72) 0%, rgba(18, 24, 32, 0.85) 55%), url('/images/heroes/service.jpg');
+}
+
+html[data-theme="dark"] .category-card--kovannye-diski {
+    background-image: linear-gradient(180deg, rgba(22, 28, 38, 0.72) 0%, rgba(18, 24, 32, 0.85) 55%), url('/images/heroes/catalog.jpg');
+}
+
+html[data-theme="dark"] .auth-page {
+    background-image: linear-gradient(180deg, rgba(15, 20, 28, 0.94) 0%, rgba(15, 20, 28, 0.88) 100%), var(--ac-img-auth);
+}
+
+html[data-theme="dark"] .benefit-icon--blue {
+    color: #d9bc72;
+}
+
+html[data-theme="dark"] .contacts-form .form-control:focus {
+    background: var(--ac-paper);
+}
+
+html[data-theme="dark"] .product-photo--matte {
+    mix-blend-mode: screen;
+    filter: brightness(1.05) contrast(1.02);
+}
+
+html[data-theme="dark"] .product-photo-wrap {
+    background: var(--ac-cream-dark);
+}
+
+html[data-theme="dark"] .status-badge.status-pending { color: #e8b84a; }
+html[data-theme="dark"] .status-badge.status-processing { color: #7ec4ff; }
+html[data-theme="dark"] .status-badge.status-shipped { color: #b49cff; }
+html[data-theme="dark"] .status-badge.status-completed { color: #6ec9d8; }
+html[data-theme="dark"] .status-badge.status-cancelled { color: #e8927e; }
+
+html[data-theme="dark"] .ac-alert__close {
+    background-color: rgba(255, 255, 255, 0.08) url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23b4becd'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e") center / 0.65rem no-repeat;
+}
+
+html[data-theme="dark"] .ac-alert__close:hover {
+    background-color: rgba(255, 255, 255, 0.14);
+}
+
+html[data-theme="dark"] body.ac-body,
+html[data-theme="dark"] .ac-section,
+html[data-theme="dark"] .ac-ribbon,
+html[data-theme="dark"] .product-card,
+html[data-theme="dark"] .form-control,
+html[data-theme="dark"] .form-select {
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 }

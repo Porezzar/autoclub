@@ -27,7 +27,7 @@ class ProductController extends Controller
         }
 
         $products = $query->latest()->paginate(15)->withQueryString();
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::orderBy('group')->orderBy('sort_order')->get();
 
         return view('admin.products.index', compact('products', 'categories'));
     }

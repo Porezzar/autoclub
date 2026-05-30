@@ -8,9 +8,19 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $categories = Category::withCount('products')->get();
+        $tireCategories = Category::withCount('products')
+            ->where('group', Category::GROUP_TIRES)
+            ->orderBy('sort_order')
+            ->get();
 
-        return view('shop.index', compact('categories'));
+        $wheelCategories = Category::withCount('products')
+            ->where('group', Category::GROUP_WHEELS)
+            ->orderBy('sort_order')
+            ->get();
+
+        $categories = $tireCategories->concat($wheelCategories);
+
+        return view('shop.index', compact('categories', 'tireCategories', 'wheelCategories'));
     }
 
     public function about()

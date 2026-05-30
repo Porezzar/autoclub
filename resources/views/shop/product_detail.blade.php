@@ -14,7 +14,7 @@
         <div class="col-lg-6 mb-4">
             <div class="card border-0 shadow-sm overflow-hidden" style="border-radius: 15px;">
                 <div class="product-photo-wrap product-photo-wrap--detail">
-                    <img src="{{ $product->imageUrl() }}" class="product-photo @if($product->hasWhiteMatteBackground()) product-photo--matte @endif" alt="{{ $product->name }}" style="max-height: 400px;">
+                    <img src="{{ $product->imageUrl() }}" class="{{ $product->photoCssClass() }}" alt="{{ $product->name }}" style="max-height: 400px;">
                 </div>
             </div>
         </div>

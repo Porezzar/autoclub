@@ -19,7 +19,8 @@ class ProductController extends Controller
 
         return view('shop.products', [
             'products' => $products->latest()->get(),
-            'categories' => Category::all(),
+            'tireCategories' => Category::where('group', Category::GROUP_TIRES)->orderBy('sort_order')->get(),
+            'wheelCategories' => Category::where('group', Category::GROUP_WHEELS)->orderBy('sort_order')->get(),
             'currentCategory' => $categorySlug,
         ]);
     }

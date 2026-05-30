@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <script>
+    (function () {
+        var saved = localStorage.getItem('ac-theme');
+        var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+    })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Autoclub') — интернет-магазин автомобильных шин</title>
@@ -43,6 +50,9 @@
             @endauth
         </nav>
         <div class="ac-dock__bottom">
+            <button type="button" class="ac-dock__link ac-theme-toggle" id="ac-theme-toggle" aria-label="Переключить тему" title="Тёмная тема">
+                <i class="fas fa-moon" aria-hidden="true"></i><span>Тема</span>
+            </button>
             @auth
             @if(auth()->user()->isAdmin())
             <a href="{{ route('admin.dashboard') }}" class="ac-dock__link ac-dock__link--admin {{ request()->routeIs('admin.*') ? 'is-active' : '' }}" title="Админ-панель">
@@ -65,6 +75,10 @@
         <header class="ac-topbar">
             <a href="{{ route('index') }}"><img src="{{ asset('images/logo.svg') }}" alt="Autoclub" class="ac-brand-logo ac-brand-logo--topbar"></a>
             <span class="ac-topbar__title">Autoclub</span>
+            <div class="ac-topbar__actions">
+            <button type="button" class="ac-theme-toggle ac-theme-toggle--topbar" id="ac-theme-toggle-top" aria-label="Переключить тему" title="Тёмная тема">
+                <i class="fas fa-moon" aria-hidden="true"></i>
+            </button>
             @auth
             <a href="{{ route('cart') }}" class="text-white position-relative">
                 <i class="fas fa-cart-shopping fa-lg"></i>
@@ -73,6 +87,7 @@
             @else
             <a href="{{ route('login') }}" class="btn btn-sm btn-glow">Войти</a>
             @endauth
+            </div>
         </header>
 
         <div class="ac-ribbon d-none d-lg-flex">

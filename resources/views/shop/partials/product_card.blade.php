@@ -1,7 +1,7 @@
 <div class="card h-100 product-card">
     <div class="position-relative">
         <a href="{{ route('product.show', $product) }}" class="product-photo-wrap product-photo-wrap--card d-block">
-            <img src="{{ $product->imageUrl() }}" class="product-photo @if($product->hasWhiteMatteBackground()) product-photo--matte @endif" alt="{{ $product->name }}">
+            <img src="{{ $product->imageUrl() }}" class="{{ $product->photoCssClass() }}" alt="{{ $product->name }}">
         </a>
         @if($product->price < 7000)
         <span class="badge badge-deal position-absolute top-0 start-0 m-2">Выгодно</span>

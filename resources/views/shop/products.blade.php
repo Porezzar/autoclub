@@ -5,7 +5,7 @@
 @section('content')
 <div class="catalog-hero text-center">
     <div class="catalog-hero__inner">
-        <h1 class="fw-bold display-6 mb-2">Каталог шин</h1>
+        <h1 class="fw-bold display-6 mb-2">Каталог шин и дисков</h1>
         <p class="lead mb-0">Более 500 моделей от ведущих производителей</p>
     </div>
 </div>
@@ -21,7 +21,13 @@
         </button>
         <ul class="dropdown-menu shadow border-0">
             <li><a class="dropdown-item" href="{{ route('products', ['category' => 'all']) }}">Все</a></li>
-            @foreach($categories as $category)
+            <li><h6 class="dropdown-header">Шины</h6></li>
+            @foreach($tireCategories as $category)
+            <li><a class="dropdown-item" href="{{ route('products', ['category' => $category->slug]) }}">{{ $category->name }}</a></li>
+            @endforeach
+            <li><hr class="dropdown-divider"></li>
+            <li><h6 class="dropdown-header">Диски</h6></li>
+            @foreach($wheelCategories as $category)
             <li><a class="dropdown-item" href="{{ route('products', ['category' => $category->slug]) }}">{{ $category->name }}</a></li>
             @endforeach
         </ul>
@@ -31,7 +37,10 @@
 <div class="ac-page-wrap">
     <div class="d-flex d-md-none flex-nowrap overflow-auto gap-2 mb-4 pb-1">
         <a href="{{ route('products', ['category' => 'all']) }}" class="btn btn-sm btn-primary-custom flex-shrink-0">Все</a>
-        @foreach($categories as $category)
+        @foreach($tireCategories as $category)
+        <a href="{{ route('products', ['category' => $category->slug]) }}" class="btn btn-sm btn-outline-ac flex-shrink-0">{{ $category->name }}</a>
+        @endforeach
+        @foreach($wheelCategories as $category)
         <a href="{{ route('products', ['category' => $category->slug]) }}" class="btn btn-sm btn-outline-ac flex-shrink-0">{{ $category->name }}</a>
         @endforeach
     </div>
@@ -45,7 +54,7 @@
         <div class="col-12">
             <div class="benefit-item text-center py-5">
                 <div class="benefit-icon mx-auto mb-3"><i class="fas fa-box-open"></i></div>
-                <h3 class="fw-bold">Шины не найдены</h3>
+                <h3 class="fw-bold">Товары не найдены</h3>
                 <p class="text-muted mb-4">Попробуйте другую категорию</p>
                 <a href="{{ route('products') }}" class="btn btn-accent">Сбросить фильтры</a>
             </div>

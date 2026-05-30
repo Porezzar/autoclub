@@ -1,4 +1,43 @@
+(function () {
+    var THEME_KEY = 'ac-theme';
+
+    window.acGetTheme = function () {
+        return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    };
+
+    function updateThemeToggleButtons(theme) {
+        document.querySelectorAll('.ac-theme-toggle').forEach(function (btn) {
+            var icon = btn.querySelector('i');
+            if (!icon) {
+                return;
+            }
+
+            if (theme === 'dark') {
+                icon.className = 'fas fa-sun';
+                btn.title = 'Светлая тема';
+            } else {
+                icon.className = 'fas fa-moon';
+                btn.title = 'Тёмная тема';
+            }
+        });
+    }
+
+    window.acSetTheme = function (theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem(THEME_KEY, theme);
+        updateThemeToggleButtons(theme);
+    };
+
+    updateThemeToggleButtons(window.acGetTheme());
+})();
+
 document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.ac-theme-toggle').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            window.acSetTheme(window.acGetTheme() === 'dark' ? 'light' : 'dark');
+        });
+    });
+
     document.querySelectorAll('.ac-alert').forEach(function (alertEl) {
         var closeBtn = alertEl.querySelector('.ac-alert__close');
         if (!closeBtn) {

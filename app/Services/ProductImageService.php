@@ -30,6 +30,10 @@ class ProductImageService
             return false;
         }
 
+        if ($this->hasDarkBackground($path)) {
+            return false;
+        }
+
         $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
         if (in_array($ext, ['jpg', 'jpeg'], true)) {
             return true;
@@ -40,6 +44,49 @@ class ProductImageService
         }
 
         return $this->hasOpaqueLightBackground($path);
+    }
+
+    public function hasDarkBackground(string $path): bool
+    {
+        if (! is_file($path) || ! $this->canProcessImages()) {
+            return false;
+        }
+
+        $image = $this->loadImage($path);
+        if ($image === false) {
+            return false;
+        }
+
+        $w = imagesx($image);
+        $h = imagesy($image);
+        $dark = 0;
+        $samples = 0;
+
+        $points = [
+            [0, 0], [$w - 1, 0], [0, $h - 1], [$w - 1, $h - 1],
+            [(int) ($w / 2), 0], [(int) ($w / 2), $h - 1],
+        ];
+
+        foreach ($points as [$x, $y]) {
+            for ($dy = -6; $dy <= 6; $dy++) {
+                for ($dx = -6; $dx <= 6; $dx++) {
+                    $px = $x + $dx;
+                    $py = $y + $dy;
+                    if ($px < 0 || $py < 0 || $px >= $w || $py >= $h) {
+                        continue;
+                    }
+                    $samples++;
+                    [$r, $g, $b] = $this->readPixel($image, $px, $py);
+                    if (max($r, $g, $b) < 70) {
+                        $dark++;
+                    }
+                }
+            }
+        }
+
+        imagedestroy($image);
+
+        return $samples > 0 && ($dark / $samples) > 0.55;
     }
 
     public function store(Product $product, UploadedFile $file): string
@@ -91,9 +138,9 @@ class ProductImageService
         }
     }
 
-    public function processFile(string $sourcePath, string $targetPath): bool
+    public function processFile(string $sourcePath, string $targetPath, bool $force = false): bool
     {
-        if (! $this->needsBackgroundRemoval($sourcePath)) {
+        if (! $force && ! $this->needsBackgroundRemoval($sourcePath)) {
             return false;
         }
 
@@ -158,6 +205,8 @@ class ProductImageService
         if ($image === false) {
             throw new RuntimeException('Неподдерживаемый формат изображения.');
         }
+
+        $image = $this->downscaleIfNeeded($image);
 
         $width = imagesx($image);
         $height = imagesy($image);
@@ -286,6 +335,32 @@ class ProductImageService
             $rgba & 0xFF,
             ($rgba >> 24) & 0x7F,
         ];
+    }
+
+    private function downscaleIfNeeded(\GdImage $image, int $maxEdge = 900): \GdImage
+    {
+        $width = imagesx($image);
+        $height = imagesy($image);
+        $max = max($width, $height);
+
+        if ($max <= $maxEdge) {
+            return $image;
+        }
+
+        $scale = $maxEdge / $max;
+        $newWidth = max(1, (int) round($width * $scale));
+        $newHeight = max(1, (int) round($height * $scale));
+        $resized = imagecreatetruecolor($newWidth, $newHeight);
+
+        imagealphablending($resized, false);
+        imagesavealpha($resized, true);
+        $transparent = imagecolorallocatealpha($resized, 0, 0, 0, 127);
+        imagefill($resized, 0, 0, $transparent);
+        imagealphablending($resized, true);
+        imagecopyresampled($resized, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+        imagedestroy($image);
+
+        return $resized;
     }
 
     private function loadImage(string $path): \GdImage|false

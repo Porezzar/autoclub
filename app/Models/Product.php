@@ -30,6 +30,16 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function isWheel(): bool
+    {
+        return $this->category?->group === Category::GROUP_WHEELS;
+    }
+
+    public function photoCssClass(): string
+    {
+        return 'product-photo product-photo--matte';
+    }
+
     public function hasWhiteMatteBackground(): bool
     {
         if (! $this->image) {

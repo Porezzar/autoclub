@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 
 class ProcessProductImages extends Command
 {
-    protected $signature = 'products:process-images';
+    protected $signature = 'products:process-images {--force : Reprocess even if background looks transparent}';
 
     protected $description = 'Remove white backgrounds from existing product photos';
 
@@ -29,7 +29,7 @@ class ProcessProductImages extends Command
                 continue;
             }
 
-            if (! $images->needsBackgroundRemoval($path)) {
+            if (! $this->option('force') && ! $images->needsBackgroundRemoval($path)) {
                 $this->line("Пропуск (уже прозрачный фон): {$product->name}");
                 continue;
             }
@@ -39,7 +39,7 @@ class ProcessProductImages extends Command
 
             $this->info("Обработка: {$product->name}");
             $tempPath = $pngPath.'.tmp';
-            if (! $images->processFile($path, $tempPath)) {
+            if (! $images->processFile($path, $tempPath, (bool) $this->option('force'))) {
                 $this->warn("Не удалось обработать: {$product->name}");
                 @unlink($tempPath);
                 continue;

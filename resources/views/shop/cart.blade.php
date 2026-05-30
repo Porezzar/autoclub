@@ -22,7 +22,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="product-photo-wrap product-photo-wrap--cart me-3">
-                                                <img src="{{ $item->product->imageUrl() }}" class="product-photo @if($item->product->hasWhiteMatteBackground()) product-photo--matte @endif" alt="">
+                                                <img src="{{ $item->product->imageUrl() }}" class="{{ $item->product->photoCssClass() }}" alt="">
                                             </div>
                                             <div>
                                                 <h6 class="mb-0">{{ $item->product->name }}</h6>
